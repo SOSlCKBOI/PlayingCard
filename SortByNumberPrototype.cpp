@@ -23,7 +23,7 @@ class deck{
         void shuffleCards();
         void showDeck();
         void sortNumber();
-        void swapCard(card*,card*);
+        void swapCard(card &,card &);
     private : 
         int numberOfCard;
         card deckCard[52];
@@ -117,10 +117,10 @@ void deck::shuffleCards(){
 
 deck::deck() : numberOfCard(0){}
 
-void deck::swapCard(card *a, card *b){
-    card tempCard = *a;
-    *a = *b;
-    *b = tempCard;
+void deck::swapCard(card &a, card &b){
+    card tempCard = a;
+    a = b;
+    b = tempCard;
 }
 
 void deck::sortNumber(){
@@ -132,6 +132,6 @@ void deck::sortNumber(){
             if(deckCard[j].getCardNumber() < deckCard[minIndex].getCardNumber())
                 minIndex = j;
         }
-        swapCard(&deckCard[minIndex],&deckCard[i]);
+        swapCard(deckCard[minIndex],deckCard[i]);
     }
 }
