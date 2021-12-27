@@ -23,15 +23,19 @@ class deck{
         void shuffleCards();
         void showDeck();
     private : 
-        card deckCard[52];
         int numberOfCard;
+        card deckCard[52];
 };
+
+//main is here
 
 int main(){
     deck FirstDeck;
     FirstDeck.starterDeck();
-    //FirstDeck.showDeck();
+    cout << "Deck before shuffle" << endl << endl;
+    FirstDeck.showDeck();
     FirstDeck.shuffleCards();
+    cout << "Deck after shuffle" << endl << endl;
     FirstDeck.showDeck();
 }
 
@@ -52,7 +56,7 @@ int card::getCardNumber(){
 }
 
 void deck::starterDeck(){
-    char clubs[] = "club", diamonds[] = "diamonds", hearts[] = "hearts", spades[] = "spades";
+    char clubs[] = "clubs", diamonds[] = "diamonds", hearts[] = "hearts", spades[] = "spades";
     numberOfCard = 52;
     for(int i=0;i<52;i++){
         if(i<=12){
@@ -91,6 +95,7 @@ void deck::showDeck(){
                 cout << "[" << deckCard[i].getCardFace() << "-" << "KING" << "]" << endl;
         }
     }
+    cout << endl;
 }
 
 void deck::shuffleCards(){
@@ -99,7 +104,6 @@ void deck::shuffleCards(){
     srand(time(NULL));
     for(int i=0;i<numberOfCard;i++){
         randomIndex = rand()%numberOfCard;
-        //cout << randomIndex;
         tempCard = deckCard[randomIndex];
         deckCard[randomIndex] = deckCard[i];
         deckCard[i] = tempCard;
