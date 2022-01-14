@@ -31,10 +31,16 @@ class Deck
 	    void placeAfter(Card);
         void placeBefore(Card);
         Card sendCard(int);
-        void dealCard(int, int, Deck[]);
+        void dealCard(int,int); //(Number of players, Number of deal)
+        void showHand(); //show card on player hands
     private :
         int numberOfCard;
+        int numOnHand;
+        int rows,cols;
         Card deckCard[52];
+        Card players[20][20];  // assume players max 20 , ถือไพ่สูงสุดในมือ 20  ใบ
+        Card LeftCard[52];
+
 };
 
 //main
@@ -47,46 +53,34 @@ int main(){
     FirstDeck.shuffleCards();
     cout << "Deck after shuffle" << endl << endl;
     FirstDeck.showDeck();*/
-    /*Deck testDeck, testDeck2;
+    Deck testDeck, testDeck2;
     testDeck.testDeck();
     cout << "Test deck" << endl;
     testDeck.showDeck();
     cout << "Test deck after swap card number 1 and card number 4" << endl;
     testDeck.swapCard(1,4);
     testDeck.showDeck();
-    cout << "Show card number 3 from test deck" << endl;
+    cout << "After the cards have been dealt: " << endl;
+    testDeck.dealCard(2,2); //(NumofPlayers,NumofDeal)
+    testDeck.showHand(); //Show card on player hands
+    testDeck.showDeck(); //
+
+    /*cout << "Show card number 3 from test deck" << endl;
     testDeck.showSingleCard(3);
-    cout << "Give the last card of testDeck to testDeck2" << endl;
-    //testDeck2.testDeck();
-    testDeck2.placeAfter(testDeck.sendCard(1));
+    cout << "Give the third card of testDeck to testDeck2" << endl;
+    testDeck2.placeBefore(testDeck.sendCard(3));
     cout << "TestDeck after sendCard" << endl;
     testDeck.showDeck();
     cout << "TestDeck2 after placeCard" << endl;
     testDeck2.showDeck();*/
-    Deck TestStack;
-    Deck Player[2];
-    TestStack.starterDeck();
-    TestStack.shuffleCards();
-    cout << "Shuffled Full stack before deal card" << endl;
-    TestStack.showDeck();
-    cout << "Player 1 hand before deal card" << endl;
-    Player[0].showDeck();
-    cout << "Player 2 hand before deal card" << endl;
-    Player[1].showDeck();
-    TestStack.dealCard(10,2,Player); //(int amountDeal, int numberOfPlayer, Deck reciever[20])
-    cout << "Full stack after deal card" << endl;
-    TestStack.showDeck();
-    cout << "Player 1 hand after deal card" << endl;
-    Player[0].showDeck();
-    cout << "Player 2 hand after deal card" << endl;
-    Player[1].showDeck();
+
 }
 
 //ฟังก์ชั่นกำหนดค่าให้ไพ่ทั้งสำรับ
 void Deck::starterDeck(){
     for(int i=0;i<52;i++){
         if(i<=12){
-            deckCard[i].assignCardFace('C'); 
+            deckCard[i].assignCardFace('C');
             deckCard[i].assignCardNumber(i+1);
         }
         else if(i<=25){
@@ -108,7 +102,7 @@ void Deck::starterDeck(){
 //ฟังก์ชั่นแสดงผลไพ่ทั้งกองที่ console
 void Deck::showDeck(){
     if(numberOfCard == 0)
-        cout << "There is no card on this deck" << endl;
+        cout << "There is no card on this deck";
     else{
         for(int i=0;i<numberOfCard;i++)
             showCard(i);
@@ -118,14 +112,14 @@ void Deck::showDeck(){
 
 //ฟังก์ชั่นสับไพ่
 void Deck::shuffleCards(){
-    int randomIndex; 
-    Card tempCard; 
-    srand(time(NULL)); 
+    int randomIndex;
+    Card tempCard;
+    srand(time(NULL));
     for(int i=0;i<numberOfCard;i++){
         randomIndex = rand()%numberOfCard;
-        tempCard = deckCard[randomIndex];                                  
-        deckCard[randomIndex] = deckCard[i];                 
-        deckCard[i] = tempCard;        
+        tempCard = deckCard[randomIndex];
+        deckCard[randomIndex] = deckCard[i];
+        deckCard[i] = tempCard;
     }
 }
 
@@ -148,20 +142,20 @@ void Deck::showCard(int i){
     else if(deckCard[i].getCardNumber() == 12)
         cout << "[" << deckCard[i].getCardFace() << "-" << "Q" << "]" << endl;
     else if(deckCard[i].getCardNumber() == 13)
-        cout << "[" << deckCard[i].getCardFace() << "-" << "K" << "]" << endl; 
+        cout << "[" << deckCard[i].getCardFace() << "-" << "K" << "]" << endl;
 }
 
 void Deck::testDeck(){
     numberOfCard = 5;
-    deckCard[0].assignCardFace('C'); 
+    deckCard[0].assignCardFace('C');
     deckCard[0].assignCardNumber(1);
-    deckCard[1].assignCardFace('C'); 
+    deckCard[1].assignCardFace('C');
     deckCard[1].assignCardNumber(5);
-    deckCard[2].assignCardFace('H'); 
+    deckCard[2].assignCardFace('H');
     deckCard[2].assignCardNumber(3);
-    deckCard[3].assignCardFace('S'); 
+    deckCard[3].assignCardFace('S');
     deckCard[3].assignCardNumber(2);
-    deckCard[4].assignCardFace('D'); 
+    deckCard[4].assignCardFace('D');
     deckCard[4].assignCardNumber(12);
 }
 
@@ -182,20 +176,50 @@ void Deck::placeBefore(Card a)
     numberOfCard++;
 }
 
-Card Deck::sendCard(int index){
+Card Deck::sendCard(int index)
+{
     Card tempCard = deckCard[index-1];
-    for(int i = index-1; i < numberOfCard ;i++){
+    for(int i = index-1; i < numberOfCard ;i++)
+    {
         deckCard[i] = deckCard[i+1];
     }
     numberOfCard--;
     return tempCard;
 }
 
-void Deck::dealCard(int amountDeal, int numberOfPlayer, Deck reciever[20]){
-    cout << "Dealing cards........" << endl;
-    for(int i = 0; i < amountDeal; i++){
-        for(int j = 0; j < numberOfPlayer; j++){
-            reciever[j].placeAfter(sendCard(numberOfCard));
+void Deck::dealCard(int row, int col) // row = NumOfPlayers, col = NumOfDealCards
+{
+    int countCard = numberOfCard;
+    rows = row, cols = col;
+
+    for (int j = 0; j < col; ++j) //คนละกี่ใบ
+    {
+        for (int i = 0; i < row ; ++i) //กี่คน
+        {
+            players[i][j] = deckCard[countCard-1];
+            countCard--;
         }
     }
+
 }
+
+void Deck::showHand()
+{
+    int numOnHand=0;
+    for (int i = 0; i < rows ; i++)
+    {
+        //showCard(0);
+        cout << "Player " << i+1 << ":" <<endl;
+        for (int j = 0; j < cols ; j++)
+        {
+            cout << ' ';
+            deckCard[numOnHand] = players[i][j];
+            showCard(numOnHand);
+            numOnHand++;
+        }
+        cout << endl;
+    }
+    numberOfCard = rows*cols;
+}
+
+

@@ -65,7 +65,7 @@ int main(){
     testDeck2.showDeck();*/
     Deck TestStack;
     Deck Player[2];
-    TestStack.starterDeck();
+    TestStack.testDeck();
     TestStack.shuffleCards();
     cout << "Shuffled Full stack before deal card" << endl;
     TestStack.showDeck();
@@ -73,7 +73,7 @@ int main(){
     Player[0].showDeck();
     cout << "Player 2 hand before deal card" << endl;
     Player[1].showDeck();
-    TestStack.dealCard(10,2,Player); //(int amountDeal, int numberOfPlayer, Deck reciever[20])
+    TestStack.dealCard(2,2,Player);
     cout << "Full stack after deal card" << endl;
     TestStack.showDeck();
     cout << "Player 1 hand after deal card" << endl;
