@@ -32,6 +32,9 @@ class Deck
         void placeBefore(Card);
         Card sendCard(int);
         void dealCard(int, int, Deck[]);
+        void pickSetCard(int, int, Deck &); 
+        void testDeck2(); //other sample deck which has 3 cards as well
+        void placeBetween(Card, int);
     private :
         int numberOfCard;
         Card deckCard[52];
@@ -63,9 +66,10 @@ int main(){
     testDeck.showDeck();
     cout << "TestDeck2 after placeCard" << endl;
     testDeck2.showDeck();*/
-    Deck TestStack;
+
+    /*Deck TestStack;
     Deck Player[2];
-    TestStack.starterDeck();
+    TestStack.testDeck();
     TestStack.shuffleCards();
     cout << "Shuffled Full stack before deal card" << endl;
     TestStack.showDeck();
@@ -73,13 +77,47 @@ int main(){
     Player[0].showDeck();
     cout << "Player 2 hand before deal card" << endl;
     Player[1].showDeck();
-    TestStack.dealCard(10,2,Player); //(int amountDeal, int numberOfPlayer, Deck reciever[20])
+    TestStack.dealCard(1,2,Player); //(int amountDeal, int numberOfPlayer, Deck reciever[20])
     cout << "Full stack after deal card" << endl;
     TestStack.showDeck();
     cout << "Player 1 hand after deal card" << endl;
     Player[0].showDeck();
     cout << "Player 2 hand after deal card" << endl;
-    Player[1].showDeck();
+    Player[1].showDeck();*/
+
+    Deck TestStack;
+    Deck NewDeck[1];
+
+    TestStack.testDeck();
+    cout << "Sample Deck" << endl;
+    TestStack.showDeck();
+    cout << "The New Deck" << endl;
+    NewDeck[0].showDeck();
+    cout << "The New Deck after pick set of cards" << endl;
+    TestStack.pickSetCard(2,4,NewDeck[0]); //เลือกไพ่ใบที่ 2 ถึง 4 ไปไว้ 1 กองใหม่
+    NewDeck[0].showDeck();
+    cout << "Sample Deck after pick set of cards" << endl;
+    TestStack.showDeck();
+    cout << "Show card number 2 from The New Deck" << endl;
+    NewDeck[0].showSingleCard(2);
+
+/*
+    Deck TestStack;
+    Deck Player[2];
+
+    TestStack.testDeck();
+    cout << "--> Sample Deck 1 <--" << endl;
+    TestStack.showDeck();
+    Player[0].testDeck2();
+    cout << "--> Card on Player's hand <--" << endl;
+    Player[0].showDeck();
+    Player[0].placeBetween(TestStack.sendCard(2), 2);
+    cout << "--> Sample Deck 1 <--" << endl;
+    TestStack.showDeck();
+    cout << "--> Card on Player's hand <--" << endl;
+    Player[0].showDeck();
+*/
+
 }
 
 //ฟังก์ชั่นกำหนดค่าให้ไพ่ทั้งสำรับ
@@ -198,4 +236,33 @@ void Deck::dealCard(int amountDeal, int numberOfPlayer, Deck reciever[20]){
             reciever[j].placeAfter(sendCard(numberOfCard));
         }
     }
+}
+
+void Deck::pickSetCard(int firstCard, int lastCard, Deck &recieveDeck)
+{
+    for (int i = firstCard; i <= lastCard ; i++)
+    {
+        recieveDeck.placeAfter(sendCard(firstCard)); //ส่งจากใบสุดท้ายที่เลือก
+    }
+}
+
+void Deck::testDeck2()
+{
+    numberOfCard = 3;
+    deckCard[0].assignCardFace('D');
+    deckCard[0].assignCardNumber(10);
+    deckCard[1].assignCardFace('S');
+    deckCard[1].assignCardNumber(7);
+    deckCard[2].assignCardFace('D');
+    deckCard[2].assignCardNumber(3);
+}
+
+void Deck::placeBetween(Card a, int position)
+{
+    for(int i = numberOfCard; i > 0; i--)
+    {
+        deckCard[i] = deckCard[i-1];
+    }
+    deckCard[position - 1] = a;
+    numberOfCard++;
 }
